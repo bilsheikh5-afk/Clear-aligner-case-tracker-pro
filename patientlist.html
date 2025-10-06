@@ -1,0 +1,209 @@
+<!-- patient-list.html: Patient List Page -->
+<<script src="auth.js"></script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patients - Clear Aligner Case Tracker Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Reuse the same :root, *, body, .container, header, .dashboard, .sidebar, .main-content, .card, etc. styles from dashboard.html */
+    /* For brevity, assume they are included or linked via external CSS. Add page-specific styles below. */
+
+    .patients-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .patients-table th, .patients-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    body[data-theme="dark"] .patients-table th, body[data-theme="dark"] .patients-table td {
+      border-bottom: 1px solid #374151;
+    }
+
+    .patients-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    body[data-theme="dark"] .patients-table th {
+      background: #4b5563;
+      color: var(--text);
+    }
+
+    .patients-table tr:hover {
+      background: #f8f9fa;
+    }
+
+    body[data-theme="dark"] .patients-table tr:hover {
+      background: #4b5563;
+    }
+
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .add-patient-btn {
+      background: var(--success);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .add-patient-btn:hover {
+      background: #16a34a;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    body[data-theme="dark"] .search-bar {
+      background: var(--card-bg);
+      border-color: #374151;
+      color: var(--text);
+    }
+
+    .no-patients {
+      text-align: center;
+      color: var(--secondary);
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Include header from dashboard.html or copy the structure -->
+  <div class="container">
+    <header>
+      <!-- Header content as in dashboard -->
+      <div class="logo">
+        <svg class="logo-svg" viewBox="0 0 871 512" xmlns="http://www.w3.org/2000/svg">
+          <text x="10" y="60" font-family="Segoe UI, Arial, sans-serif" font-size="50" font-weight="bold" fill="white">
+            ClearPro
+          </text>
+          <!-- Circles as before -->
+        </svg>
+        <div class="logo-text">
+          <h1>Patients <span>Pro</span></h1>
+        </div>
+      </div>
+      <div class="user-menu">
+        <!-- User menu as in dashboard -->
+      </div>
+    </header>
+
+    <div class="dashboard">
+      <div class="sidebar">
+        <!-- Sidebar nav as in dashboard -->
+      </div>
+
+      <div class="main-content">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">All Patients</div>
+            <button class="add-patient-btn" onclick="window.location.href='register-patient.html'">
+              <i class="fas fa-plus"></i> Add New Patient
+            </button>
+          </div>
+
+          <input type="text" class="search-bar" id="patientSearch" placeholder="Search patients by name or ID..." onkeyup="filterPatients(this.value)" />
+
+          <table class="patients-table" id="patientsTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Progress</th>
+                <th>Compliance</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patientsBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+
+          <div id="noPatients" class="no-patients" style="display: none;">No patients found.</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <!-- Footer as in dashboard -->
+    </footer>
+  </div>
+
+  <script>
+    // Load patients and populate table
+    async function loadPatients() {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch('/api/patients', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const patients = await response.json();
+        const tbody = document.getElementById('patientsBody');
+        const noPatients = document.getElementById('noPatients');
+        if (patients.length === 0) {
+          noPatients.style.display = 'block';
+          return;
+        }
+        noPatients.style.display = 'none';
+        tbody.innerHTML = patients.map(p => `
+          <tr>
+            <td>${p.name}</td>
+            <td>${p.id}</td>
+            <td>${p.progress}%</td>
+            <td>${p.compliance}%</td>
+            <td><span class="status-badge ${p.progress >= 80 ? 'status-active' : 'status-completed'}">${p.progress >= 80 ? 'Active' : 'Completed'}</span></td>
+            <td>
+              <button onclick="viewPatient('${p.id}')" class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;">
+                <i class="fas fa-eye"></i> View
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        alert('Error loading patients');
+      }
+    }
+
+    function filterPatients(query) {
+      const rows = document.querySelectorAll('#patientsBody tr');
+      rows.forEach(row => {
+        const name = row.cells[0].textContent.toLowerCase();
+        const id = row.cells[1].textContent.toLowerCase();
+        row.style.display = name.includes(query.toLowerCase()) || id.includes(query.toLowerCase()) ? '' : 'none';
+      });
+    }
+
+    function viewPatient(id) {
+      window.location.href = `patient-detail.html?id=${id}`; // Link to detail page
+    }
+
+    // Theme and other scripts as in dashboard
+    // ... (copy from dashboard script)
+
+    document.addEventListener('DOMContentLoaded', loadPatients);
+  </script>
+</body>
+</html>

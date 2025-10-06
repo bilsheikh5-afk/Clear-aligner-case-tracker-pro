@@ -1,0 +1,180 @@
+<!-- appointments.html: Appointments Page -->
+<<script src="auth.js"></script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointments - Clear Aligner Case Tracker Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Reuse styles from dashboard.html */
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin: 20px 0;
+    }
+
+    .calendar-header {
+      text-align: center;
+      font-weight: bold;
+      background: var(--primary);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .calendar-day {
+      padding: 10px;
+      text-align: center;
+      background: #f8f9fa;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    body[data-theme="dark"] .calendar-day {
+      background: #4b5563;
+    }
+
+    .calendar-day:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .appointment-form {
+      background: var(--light, white);
+      padding: 20px;
+      border-radius: var(--radius);
+      margin-top: 20px;
+    }
+
+    body[data-theme="dark"] .appointment-form {
+      background: var(--card-bg);
+    }
+
+    .appointment-list {
+      margin-top: 20px;
+    }
+
+    .appointment-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    body[data-theme="dark"] .appointment-item {
+      border-color: #374151;
+    }
+
+    .btn-small {
+      padding: 5px 10px;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header as in dashboard -->
+    <header>
+      <!-- ... -->
+    </header>
+
+    <div class="dashboard">
+      <div class="sidebar">
+        <!-- Sidebar as in dashboard -->
+      </div>
+
+      <div class="main-content">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Appointments</div>
+            <button class="btn btn-primary" onclick="showForm()">
+              <i class="fas fa-plus"></i> New Appointment
+            </button>
+          </div>
+
+          <div id="calendar" class="calendar">
+            <div class="calendar-header">Sun</div>
+            <div class="calendar-header">Mon</div>
+            <!-- ... Full week headers ... -->
+            <div class="calendar-day" onclick="selectDate(this)">1</div>
+            <!-- Dynamically populate days -->
+          </div>
+
+          <div id="appointmentForm" class="appointment-form" style="display: none;">
+            <form id="apptForm">
+              <div class="form-group">
+                <label for="patientSelect">Patient</label>
+                <select id="patientSelect" required>
+                  <option value="">Select Patient</option>
+                  <!-- Load from API -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="apptDate">Date</label>
+                <input type="date" id="apptDate" required />
+              </div>
+              <div class="form-group">
+                <label for="apptTime">Time</label>
+                <input type="time" id="apptTime" required />
+              </div>
+              <div class="form-group">
+                <label for="apptType">Type</label>
+                <select id="apptType" required>
+                  <option value="checkup">Check-up</option>
+                  <option value="virtual">Virtual</option>
+                  <option value="lab">Lab Review</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Schedule</button>
+              <button type="button" class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+            </form>
+          </div>
+
+          <div class="appointment-list" id="apptList">
+            <!-- Dynamically populated from API -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <!-- Footer -->
+    </footer>
+  </div>
+
+  <script>
+    // Load appointments and populate
+    async function loadAppointments() {
+      // Fetch from /api/appointments (add backend endpoint)
+      // Populate calendar and list
+    }
+
+    function showForm() {
+      document.getElementById('appointmentForm').style.display = 'block';
+    }
+
+    function hideForm() {
+      document.getElementById('appointmentForm').style.display = 'none';
+    }
+
+    function selectDate(day) {
+      document.getElementById('apptDate').value = day.textContent; // Simplified
+    }
+
+    // Form submission to /api/appointments
+    document.getElementById('apptForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // Fetch POST to backend
+      hideForm();
+    });
+
+    document.addEventListener('DOMContentLoaded', loadAppointments);
+  </script>
+</body>
+</html>
