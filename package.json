@@ -1,0 +1,16 @@
+{
+  "name": "clearpro-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Clear Aligner Case Tracker Pro",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
