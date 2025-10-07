@@ -1,4 +1,3 @@
-// Import dependencies
 const express = require('express');
 const path = require('path');
 
@@ -17,15 +16,17 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// ✅ Optional: 404 fallback (serves index.html for unknown routes)
+// ❌ Remove this — it forces everything to use index.html
+// app.use((req, res) => {
+//   res.status(404).sendFile(path.join(__dirname, 'public', 'index.html'));
+// });
+
+// ✅ Optional: add a real 404 page
 app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.status(404).send('<h1>404 - Page Not Found</h1>');
 });
 
-// ✅ Use Render's provided PORT or fallback to 3000 locally
 const PORT = process.env.PORT || 3000;
-
-// ✅ Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
