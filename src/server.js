@@ -1,15 +1,10 @@
-// server.js
-const path = require('path');
-const express = require('express'); // Assuming Express
-app.use(express.static(path.join(__dirname, 'src/public'))); // Or just 'public' if src/ is root
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src/public/login.html'));
-});
+// Import dependencies
 const express = require('express');
 const path = require('path');
+
 const app = express();
 
-// ✅ Serve all static files from the "public" folder
+// ✅ Serve all static files from "src/public"
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ✅ Route: Homepage → index.html
@@ -22,13 +17,15 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// ✅ Optional: 404 fallback (if no route/file matches)
+// ✅ Optional: 404 fallback (serves index.html for unknown routes)
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ✅ Use Render's PORT or fallback to 3000 for local dev
+// ✅ Use Render's provided PORT or fallback to 3000 locally
 const PORT = process.env.PORT || 3000;
+
+// ✅ Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
