@@ -1,0 +1,176 @@
+<!-- settings.html: Settings Page -->
+<script src="auth.js"></script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings - Clear Aligner Case Tracker Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Reuse styles from dashboard.html */
+    .settings-section {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    body[data-theme="dark"] .settings-section {
+      border-bottom: 1px solid #374151;
+    }
+
+    .settings-section h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 25px;
+      background: #ccc;
+      border-radius: 25px;
+      cursor: pointer;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 21px;
+      height: 21px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .toggle-switch input:checked + .slider {
+      transform: translateX(25px);
+    }
+
+    .toggle-switch input:checked {
+      background: var(--success);
+    }
+
+    .profile-form {
+      display: grid;
+      gap: 15px;
+    }
+
+    .profile-form .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-form input {
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header and sidebar as in dashboard -->
+
+    <div class="main-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Settings</div>
+        </div>
+
+        <div class="settings-section">
+          <h3><i class="fas fa-user"></i> Profile</h3>
+          <form class="profile-form">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <input type="text" id="fullName" value="Dr. Jennifer Wilson" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" value="jennifer@clinic.com" />
+            </div>
+            <div class="form-group">
+              <label for="password">New Password</label>
+              <input type="password" id="password" placeholder="Leave blank to keep current" />
+            </div>
+            <button type="submit" class="btn btn-primary">Save Profile</button>
+          </form>
+        </div>
+
+        <div class="settings-section">
+          <h3><i class="fas fa-cog"></i> Preferences</h3>
+          <div class="setting-item">
+            <span>Dark Mode</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="darkMode" checked onchange="toggleTheme()" />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <span>Notifications</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="notifications" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <span>Auto-Save Progress</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="autoSave" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><i class="fas fa-shield-alt"></i> Security</h3>
+          <div class="setting-item">
+            <span>Two-Factor Auth</span>
+            <button class="btn btn-secondary btn-small">Enable</button>
+          </div>
+          <div class="setting-item">
+            <span>Session Timeout</span>
+            <select>
+              <option>30 minutes</option>
+              <option>1 hour</option>
+              <option>Never</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-danger" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = 'index.html';
+    }
+
+    // Save preferences to backend /api/settings
+    document.querySelector('.profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // POST to backend
+      alert('Profile updated!');
+    });
+
+    // Theme toggle as before
+  </script>
+</body>
+</html>

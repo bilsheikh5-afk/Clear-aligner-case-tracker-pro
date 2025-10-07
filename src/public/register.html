@@ -1,0 +1,301 @@
+<!-- register-patient.html: Patient Registration Page -->
+<<script src="auth.js"></script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register Patient - Clear Aligner Case Tracker Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Reuse the same :root and * styles from dashboard.html for consistency */
+    :root {
+      --primary: #1e40af;
+      --primary-dark: #1e3a8a;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --info: #17a2b8;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] {
+      --light: #1f2937;
+      --dark: #f9fafb;
+      --background: #111827;
+      --card-bg: #1f2937;
+      --text: #f9fafb;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light, #f5f7ff);
+      color: var(--dark, #333);
+      line-height: 1.6;
+      transition: var(--transition);
+      padding: 20px;
+    }
+
+    body[data-theme="dark"] {
+      background-color: var(--background);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--light, white);
+      padding: 40px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    body[data-theme="dark"] .container {
+      background: var(--card-bg);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    body[data-theme="dark"] .form-group label {
+      color: var(--text);
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    body[data-theme="dark"] .form-group input, body[data-theme="dark"] .form-group select, body[data-theme="dark"] .form-group textarea {
+      background: var(--card-bg);
+      border-color: #374151;
+      color: var(--text);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+    }
+
+    .btn-secondary:hover {
+      background: #5c636a;
+    }
+
+    .success-message {
+      background: var(--success);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 8px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-user-plus"></i> Register New Patient</h1>
+      <p>Fill in details for clear aligner treatment registration</p>
+    </div>
+
+    <form id="registerForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" required />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" required />
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob" required />
+        </div>
+        <div class="form-group">
+          <label for="treatmentType">Treatment Type</label>
+          <select id="treatmentType" required>
+            <option value="">Select Type</option>
+            <option value="comprehensive">Comprehensive Aligner Therapy</option>
+            <option value="moderate">Moderate Alignment</option>
+            <option value="minor">Minor Corrections</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="startDate">Estimated Start Date</label>
+          <input type="date" id="startDate" required />
+        </div>
+        <div class="form-group">
+          <label for="duration">Estimated Duration (Months)</label>
+          <input type="number" id="duration" min="1" max="36" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="notes">Additional Notes</label>
+        <textarea id="notes" rows="4" placeholder="Any special considerations?"></textarea>
+      </div>
+      <button type="submit" class="btn">
+        <i class="fas fa-save"></i> Register Patient
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="window.location.href='dashboard.html'">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </button>
+      <div id="success" class="success-message"></div>
+    </form>
+  </div>
+
+  <script>
+    // Theme Toggle (same as dashboard)
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      const icon = document.querySelector('.theme-toggle i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.body.setAttribute('data-theme', savedTheme);
+      if (savedTheme === 'dark') {
+        document.querySelector('.theme-toggle i').classList.replace('fa-moon', 'fa-sun');
+      }
+
+      // Set default start date to today
+      document.getElementById('startDate').valueAsDate = new Date();
+
+      // Form Submission
+      document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = {
+          name: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          dob: document.getElementById('dob').value,
+          treatmentType: document.getElementById('treatmentType').value,
+          startDate: document.getElementById('startDate').value,
+          duration: document.getElementById('duration').value,
+          notes: document.getElementById('notes').value
+        };
+
+        const token = localStorage.getItem('token');
+        try {
+          const response = await fetch('/api/patients', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify(formData)
+          });
+          if (response.ok) {
+            const newPatient = await response.json();
+            document.getElementById('success').textContent = `Patient registered successfully! ID: ${newPatient.id}`;
+            document.getElementById('success').style.display = 'block';
+            document.getElementById('registerForm').reset();
+            setTimeout(() => window.location.href = 'dashboard.html', 2000);
+          } else {
+            const error = await response.json();
+            alert(error.error || 'Registration failed');
+          }
+        } catch (err) {
+          alert('Network error. Please try again.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
