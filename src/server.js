@@ -1,4 +1,10 @@
 // server.js
+const path = require('path');
+const express = require('express'); // Assuming Express
+app.use(express.static(path.join(__dirname, 'src/public'))); // Or just 'public' if src/ is root
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src/public/login.html'));
+});
 const express = require('express');
 const path = require('path');
 const app = express();
